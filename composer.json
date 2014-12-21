@@ -1,0 +1,25 @@
+{
+    "name": "backbee/tools",
+    "description": "BackBee tools library for php",
+    "keywords": ["tools", "utilities", "array manipulation", "string manipulation"],
+    "type": "library",
+    "license": "GPL-3.0+",
+    "authors": [
+    {
+        "name": "Mickaël Andrieu",
+        "email": "mickael.andrieu@lp-digital.fr"
+    }
+    ],
+    "require": {
+        "php": ">=5.4.4",
+    },
+    "autoload": {
+        "psr-4": {"BackBee\\Tools\\": ""}
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
