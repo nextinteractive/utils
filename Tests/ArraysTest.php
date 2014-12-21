@@ -28,9 +28,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers \BackBee\Util\Arrays::has
-     */
     public function testHas()
     {
         $this->assertTrue(Arrays::has($this->_mock, 'key:subkey:subsubkey'));
@@ -41,7 +38,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \BackBee\Util\Arrays::has
      * @expectedException \BackBee\Exception\InvalidArgumentException
      */
     public function testHasWithInvalidKey()
@@ -50,7 +46,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \BackBee\Util\Arrays::has
      * @expectedException \BackBee\Exception\InvalidArgumentException
      */
     public function testHasWithInvalidSeparator()
@@ -58,9 +53,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(Arrays::has($this->_mock, 'key', new \stdClass()));
     }
 
-    /**
-     * @covers \BackBee\Util\Arrays::get
-     */
     public function testGet()
     {
         $this->assertEquals('value', Arrays::get($this->_mock, 'key:subkey:subsubkey'));
@@ -78,7 +70,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \BackBee\Util\Arrays::get
      * @expectedException \BackBee\Exception\InvalidArgumentException
      */
     public function testGetWithInvalidKey()
@@ -87,7 +78,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \BackBee\Util\Arrays::get
      * @expectedException \BackBee\Exception\InvalidArgumentException
      */
     public function testGetWithInvalidSeparator()
@@ -95,9 +85,6 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(Arrays::get($this->_mock, 'key', null, new \stdClass()));
     }
 
-    /**
-     * @covers \BackBee\Util\Arrays::array_column
-     */
     public function testArray_column()
     {
         $mock = array(
