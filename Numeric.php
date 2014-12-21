@@ -22,9 +22,6 @@ namespace BackBee\Utils;
 /**
  * Set of utility methods to deal with numeric varaibles
  *
- * @category    BackBee
- * @package     BackBee\Util
- * @copyright   Lp digital system
  * @author      c.rouillon <charles.rouillon@lp-digital.fr>
  */
 class Numeric

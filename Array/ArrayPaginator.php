@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with BackBee. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace BackBee\Utils\Array;
+namespace BackBee\Tools\Array;
 
 /**
  * @author      c.rouillon <charles.rouillon@lp-digital.fr>
