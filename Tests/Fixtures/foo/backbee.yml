@@ -1,0 +1,2 @@
+{% set name = 'BackBee' %}
+Hello {{ name }}

@@ -271,7 +271,7 @@ class File
      * Moves file
      * @param  string                                           $from The source file path
      * @param  string                                           $to   The target file path
-     * @return boolean                                          Returns TRUE on success
+     * @return boolean                                          Returns true on success
      * @throws \BackBee\Utils\Exception\InvalidArgumentException Occures if either $from or $to is invalid
      * @throws \BackBee\Utils\Exception\ApplicationException Occures if $from file can not be deleted
      */
@@ -326,6 +326,7 @@ class File
             $files[] = $file[0];
         }
 
+        sort($files);
         return $files;
     }
 
@@ -375,7 +376,7 @@ class File
     public static function extractZipArchive($file, $destinationDir, $createDir = false)
     {
         if (!file_exists($destinationDir)) {
-            if (false == $createDir) {
+            if (false === $createDir) {
                 throw new ApplicationException(sprintf("Destination directory does not exist: %s .", $destinationDir));
             }
 
@@ -396,9 +397,10 @@ class File
         if (false === $archive->open($file)) {
             throw new ApplicationException(sprintf("Could not open archive: %s .", $archive));
         }
-
-        if (false === $archive->extractTo($destinationDir)) {
-            throw new ApplicationException(sprintf("Could not extract archive: %s .", $archive));
+        try {
+            $archive->extractTo($destinationDir);
+        }catch(\Exception $e){
+            throw new ApplicationException(sprintf("Could not extract archive from path: %s .", $file));
         }
 
         $archive->close();
