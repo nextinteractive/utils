@@ -19,22 +19,22 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->_mock = array(
-            'key' => array(
-                'subkey' => array(
+        $this->mock = [
+            'key' => [
+                'subkey' => [
                     'subsubkey' => 'value',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     public function testHas()
     {
-        $this->assertTrue(Arrays::has($this->_mock, 'key:subkey:subsubkey'));
-        $this->assertFalse(Arrays::has($this->_mock, 'key:subkey:unknown'));
-        $this->assertFalse(Arrays::has($this->_mock, 'key:subkey:subsubkey:unknown'));
-        $this->assertTrue(Arrays::has($this->_mock, 'key::subkey::subsubkey', '::'));
-        $this->assertFalse(Arrays::has($this->_mock, 'key:subkey:subsubkey', '::'));
+        $this->assertTrue(Arrays::has($this->mock, 'key:subkey:subsubkey'));
+        $this->assertFalse(Arrays::has($this->mock, 'key:subkey:unknown'));
+        $this->assertFalse(Arrays::has($this->mock, 'key:subkey:subsubkey:unknown'));
+        $this->assertTrue(Arrays::has($this->mock, 'key::subkey::subsubkey', '::'));
+        $this->assertFalse(Arrays::has($this->mock, 'key:subkey:subsubkey', '::'));
     }
 
     /**
@@ -42,7 +42,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasWithInvalidKey()
     {
-        $this->assertTrue(Arrays::has($this->_mock, new \stdClass()));
+        $this->assertTrue(Arrays::has($this->mock, new \stdClass()));
     }
 
     /**
@@ -50,23 +50,24 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasWithInvalidSeparator()
     {
-        $this->assertTrue(Arrays::has($this->_mock, 'key', new \stdClass()));
+        $this->assertTrue(Arrays::has($this->mock, 'key', new \stdClass()));
     }
 
     public function testGet()
     {
-        $this->assertEquals('value', Arrays::get($this->_mock, 'key:subkey:subsubkey'));
-        $this->assertNull(Arrays::get($this->_mock, 'key:subkey:unknown'));
-        $this->assertNull(Arrays::get($this->_mock, 'key:subkey:subsubkey:unknown'));
-        $this->assertEquals('default', Arrays::get($this->_mock, 'key:subkey:subsubkey:unknown', 'default'));
-        $this->assertEquals('value', Arrays::get($this->_mock, 'key::subkey::subsubkey', null, '::'));
-        $this->assertNull(Arrays::get($this->_mock, 'key:subkey:subsubkey', null, '::'));
+        $this->assertEquals('value', Arrays::get($this->mock, 'key:subkey:subsubkey'));
+        $this->assertNull(Arrays::get($this->mock, 'key:subkey:unknown'));
+        $this->assertNull(Arrays::get($this->mock, 'key:subkey:subsubkey:unknown'));
+        $this->assertEquals('default', Arrays::get($this->mock, 'key:subkey:subsubkey:unknown', 'default'));
+        $this->assertEquals('value', Arrays::get($this->mock, 'key::subkey::subsubkey', null, '::'));
+        $this->assertNull(Arrays::get($this->mock, 'key:subkey:subsubkey', null, '::'));
 
-        $result = array(
-            'subkey' => array(
+        $result = [
+            'subkey' => [
                 'subsubkey' => 'value',
-        ), );
-        $this->assertEquals($result, Arrays::get($this->_mock, 'key'));
+            ],
+        ];
+        $this->assertEquals($result, Arrays::get($this->mock, 'key'));
     }
 
     /**
@@ -74,7 +75,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithInvalidKey()
     {
-        $this->assertTrue(Arrays::get($this->_mock, new \stdClass()));
+        $this->assertTrue(Arrays::get($this->mock, new \stdClass()));
     }
 
     /**
@@ -82,81 +83,90 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithInvalidSeparator()
     {
-        $this->assertTrue(Arrays::get($this->_mock, 'key', null, new \stdClass()));
+        $this->assertTrue(Arrays::get($this->mock, 'key', null, new \stdClass()));
     }
 
     public function testArray_column()
     {
-        $mock = array(
+        $mock = [
             'unused',
-            array(
+            [
                 'id' => 2135,
                 'first_name' => 'John',
                 'last_name' => 'Doe',
-            ),
-            array(
+            ],
+            [
                 'id' => 3245,
                 'first_name' => 'Sally',
                 'last_name' => 'Smith',
-            ),
-            array(
+            ],
+            [
                 'id' => 5342,
                 'first_name' => 'Jane',
                 'last_name' => 'Jones',
-            ),
-            array(
+            ],
+            [
                 'id' => 5623,
                 'first_name' => 'Peter',
                 'last_name' => 'Doe',
-            ),
-        );
+            ],
+        ];
 
-        $this->assertEquals(array(
-            array(
+        $this->assertEquals([
+            [
                 'id' => 2135,
                 'first_name' => 'John',
                 'last_name' => 'Doe',
-            ),
-            array(
+            ],
+            [
                 'id' => 3245,
                 'first_name' => 'Sally',
                 'last_name' => 'Smith',
-            ),
-            array(
+            ],
+            [
                 'id' => 5342,
                 'first_name' => 'Jane',
                 'last_name' => 'Jones',
-            ),
-            array(
+            ],
+            [
                 'id' => 5623,
                 'first_name' => 'Peter',
                 'last_name' => 'Doe',
-            ),
-                ), Arrays::array_column($mock));
-        $this->assertEquals(array('John', 'Sally', 'Jane', 'Peter'), Arrays::array_column($mock, 'first_name'));
-        $this->assertEquals(array(2135 => 'John', 3245 => 'Sally', 5342 => 'Jane', 5623 => 'Peter'), Arrays::array_column($mock, 'first_name', 'id'));
-        $this->assertEquals(array(
-            2135 => array(
+            ],
+        ], Arrays::array_column($mock));
+        $this->assertEquals(['John', 'Sally', 'Jane', 'Peter'], Arrays::array_column($mock, 'first_name'));
+        $this->assertEquals([2135 => 'John', 3245 => 'Sally', 5342 => 'Jane', 5623 => 'Peter'], Arrays::array_column($mock, 'first_name', 'id'));
+        $this->assertEquals([
+            2135 => [
                 'id' => 2135,
                 'first_name' => 'John',
                 'last_name' => 'Doe',
-            ),
-            3245 => array(
+            ],
+            3245 => [
                 'id' => 3245,
                 'first_name' => 'Sally',
                 'last_name' => 'Smith',
-            ),
-            5342 => array(
+            ],
+            5342 => [
                 'id' => 5342,
                 'first_name' => 'Jane',
                 'last_name' => 'Jones',
-            ),
-            5623 => array(
+            ],
+            5623 => [
                 'id' => 5623,
                 'first_name' => 'Peter',
                 'last_name' => 'Doe',
-            ),
-                ), Arrays::array_column($mock, null, 'id'));
+            ],
+        ], Arrays::array_column($mock, null, 'id'));
+    }
+
+    public function testToCsv()
+    {
+        $array = [0 => ['name' => 'Charles', 'role' => 'lead developper'],
+            1 => ['name' => 'Eric', 'role' => 'developper']
+        ];
+
+        $this->assertSame("Charles;lead developper\nEric;developper\n", Arrays::toCsv($array));
     }
 
     public function tearDown()
