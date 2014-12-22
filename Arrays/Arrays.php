@@ -30,7 +30,7 @@ class Arrays
     {
         $return = '';
         foreach ($values as $value) {
-            $return .= implode($separator, $value) . LINE_RETURN;
+            $return .= implode($separator, $value) . self::LINE_RETURN;
         }
         return $return;
     }

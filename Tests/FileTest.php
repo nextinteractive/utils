@@ -14,6 +14,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->folderPath = $this->getFixturesFolder() . 'foo';
         $this->privatePath = $this->getFixturesFolder() . 'bad-rights';
+        @chmod($this->privatePath, 0000);
         $this->zipPath = $this->getFixturesFolder() . 'archive';
     }
 
@@ -169,5 +170,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
     private function getFixturesFolder()
     {
         return __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR;
+    }
+
+    public function tearDown()
+    {
+        $this->folderPath = null;
+        @chmod($this->privatePath, 0755);
+        $this->privatePath = null;
+        $this->zipPath = null;
     }
 }

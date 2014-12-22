@@ -17,7 +17,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     /**
      * Sets up the fixture
      */
-    protected function setUp()
+    public function setUp()
     {
         $this->_mock = array(
             'key' => array(
@@ -38,7 +38,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BackBee\Exception\InvalidArgumentException
+     * @expectedException \Exception
      */
     public function testHasWithInvalidKey()
     {
@@ -46,7 +46,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BackBee\Exception\InvalidArgumentException
+     * @expectedException \Exception
      */
     public function testHasWithInvalidSeparator()
     {
@@ -70,7 +70,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BackBee\Exception\InvalidArgumentException
+     * @expectedException \Exception
      */
     public function testGetWithInvalidKey()
     {
@@ -78,7 +78,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BackBee\Exception\InvalidArgumentException
+     * @expectedException \Exception
      */
     public function testGetWithInvalidSeparator()
     {
@@ -157,5 +157,10 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
                 'last_name' => 'Doe',
             ),
                 ), Arrays::array_column($mock, null, 'id'));
+    }
+
+    public function tearDown()
+    {
+        $this->mock = null;
     }
 }
