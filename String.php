@@ -41,6 +41,7 @@ class String
                 }
             }
         }
+
         return $default;
     }
 
@@ -55,7 +56,7 @@ class String
     public static function toASCII($str, $charset = 'UTF-8')
     {
         $asciistr = '';
-        if (mb_detect_encoding($str, 'UTF-8', true) === FALSE) {
+        if (mb_detect_encoding($str, 'UTF-8', true) === false) {
             $str = utf8_encode($str);
         }
         iconv_set_encoding('input_encoding', 'UTF-8');
@@ -178,7 +179,7 @@ class String
      * @param int length
      * @param string ellipsis string
      * @return string
-     *  copied from symfony 1.2
+     *                      copied from symfony 1.2
      */
     public static function truncateText($text, $length = 30, $truncate_string = '...', $truncate_lastspace = false)
     {
@@ -245,6 +246,7 @@ class String
         if (in_array($str, $booleanFalse, true)) {
             return false;
         }
+
         return $str == true;
     }
 }

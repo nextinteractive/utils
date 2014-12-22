@@ -24,7 +24,6 @@ namespace BackBee\Utils\Arrays;
  */
 class ArrayPaginator implements \Countable, \IteratorAggregate
 {
-
     private $collection;
     private $currentPage;
     private $pageSize;
@@ -32,6 +31,7 @@ class ArrayPaginator implements \Countable, \IteratorAggregate
     public static function paginate(array $collection, $page = 1, $pageSize = 1)
     {
         $self = new ArrayPaginator($collection, $page, $pageSize);
+
         return $self;
     }
 

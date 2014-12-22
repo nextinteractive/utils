@@ -12,7 +12,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->copyPath = 'file.txt';
-        $this->privatePath = $this->getFixturesFolder() . 'bad-rights';
+        $this->privatePath = $this->getFixturesFolder().'bad-rights';
         @chmod($this->privatePath, 0000);
     }
 
@@ -118,7 +118,6 @@ class DirTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $dir_path);*/
     }
 
-
     public function testCallback2ParamsMove()
     {
         /*$dir_mode = 0777;
@@ -146,7 +145,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     private function getFixturesFolder()
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR;
+        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR;
     }
 
     public function tearDown()

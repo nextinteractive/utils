@@ -12,15 +12,15 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->folderPath = $this->getFixturesFolder() . 'foo';
-        $this->privatePath = $this->getFixturesFolder() . 'bad-rights';
+        $this->folderPath = $this->getFixturesFolder().'foo';
+        $this->privatePath = $this->getFixturesFolder().'bad-rights';
         @chmod($this->privatePath, 0000);
-        $this->zipPath = $this->getFixturesFolder() . 'archive';
+        $this->zipPath = $this->getFixturesFolder().'archive';
     }
 
     public function testRealpath()
     {
-        $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'FileTest.php', File::realpath(__DIR__.DIRECTORY_SEPARATOR."FileTest.php"));
+        $this->assertEquals(__DIR__.DIRECTORY_SEPARATOR.'FileTest.php', File::realpath(__DIR__.DIRECTORY_SEPARATOR."FileTest.php"));
         $this->assertEquals(false, File::realpath(DIRECTORY_SEPARATOR."FileTest.php"));
 
         $this->assertEquals($this->folderPath, File::realpath($this->folderPath));
@@ -93,21 +93,21 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testUnreadableGetFilesRecursivelyByExtension()
     {
         File::getFilesRecursivelyByExtension($this->privatePath, '.txt');
-        File::getFilesRecursivelyByExtension('','');
+        File::getFilesRecursivelyByExtension('', '');
     }
 
     public function testGetFilesRecursivelyByExtension()
     {
         $this->assertEquals(
             [
-                $this->folderPath . DIRECTORY_SEPARATOR . 'bar.txt',
-                $this->folderPath . DIRECTORY_SEPARATOR . 'foo.txt'
+                $this->folderPath.DIRECTORY_SEPARATOR.'bar.txt',
+                $this->folderPath.DIRECTORY_SEPARATOR.'foo.txt',
             ], File::getFilesRecursivelyByExtension($this->folderPath, 'txt')
         );
 
-        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'baz.php'], File::getFilesRecursivelyByExtension($this->folderPath, 'php'));
-        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'backbee.yml'], File::getFilesRecursivelyByExtension($this->folderPath, 'yml'));
-        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'noextension'], File::getFilesRecursivelyByExtension($this->folderPath, ''));
+        $this->assertEquals([$this->folderPath.DIRECTORY_SEPARATOR.'baz.php'], File::getFilesRecursivelyByExtension($this->folderPath, 'php'));
+        $this->assertEquals([$this->folderPath.DIRECTORY_SEPARATOR.'backbee.yml'], File::getFilesRecursivelyByExtension($this->folderPath, 'yml'));
+        $this->assertEquals([$this->folderPath.DIRECTORY_SEPARATOR.'noextension'], File::getFilesRecursivelyByExtension($this->folderPath, ''));
         $this->assertEquals([], File::getFilesRecursivelyByExtension($this->folderPath, 'aaa'));
     }
 
@@ -124,14 +124,14 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             [
-                $this->folderPath . DIRECTORY_SEPARATOR . 'bar.txt',
-                $this->folderPath . DIRECTORY_SEPARATOR . 'foo.txt'
+                $this->folderPath.DIRECTORY_SEPARATOR.'bar.txt',
+                $this->folderPath.DIRECTORY_SEPARATOR.'foo.txt',
             ], File::getFilesByExtension($this->folderPath, 'txt')
         );
 
-        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'baz.php'], File::getFilesByExtension($this->folderPath, 'php'));
-        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'backbee.yml'], File::getFilesByExtension($this->folderPath, 'yml'));
-        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'noextension'], File::getFilesByExtension($this->folderPath, ''));
+        $this->assertEquals([$this->folderPath.DIRECTORY_SEPARATOR.'baz.php'], File::getFilesByExtension($this->folderPath, 'php'));
+        $this->assertEquals([$this->folderPath.DIRECTORY_SEPARATOR.'backbee.yml'], File::getFilesByExtension($this->folderPath, 'yml'));
+        $this->assertEquals([$this->folderPath.DIRECTORY_SEPARATOR.'noextension'], File::getFilesByExtension($this->folderPath, ''));
         $this->assertEquals([], File::getFilesByExtension($this->folderPath, 'aaa'));
     }
 
@@ -156,20 +156,20 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractZipArchiveExistingDir()
     {
-        $zipFile = $this->getFixturesFolder() . 'archive.zip';
+        $zipFile = $this->getFixturesFolder().'archive.zip';
         File::extractZipArchive('test', $this->zipPath, true);
     }
 
     public function testResolveFilepath()
     {
-        $twigFilePath = $this->getFixturesFolder() . 'file.twig';
+        $twigFilePath = $this->getFixturesFolder().'file.twig';
         File::resolveFilepath($twigFilePath);
-        $this->assertEquals($this->getFixturesFolder() . 'file.twig', $twigFilePath);
+        $this->assertEquals($this->getFixturesFolder().'file.twig', $twigFilePath);
     }
 
     private function getFixturesFolder()
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR;
+        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR;
     }
 
     public function tearDown()

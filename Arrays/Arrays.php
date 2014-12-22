@@ -30,8 +30,9 @@ class Arrays
     {
         $return = '';
         foreach ($values as $value) {
-            $return .= implode($separator, $value) . self::LINE_RETURN;
+            $return .= implode($separator, $value).self::LINE_RETURN;
         }
+
         return $return;
     }
 
@@ -47,6 +48,7 @@ class Arrays
             }
             $return .= '</'.$key.'>';
         }
+
         return $return;
     }
 
@@ -81,6 +83,7 @@ class Arrays
                 $diff[$key] = $value;
             }
         }
+
         return $diff;
     }
 
@@ -100,6 +103,7 @@ class Arrays
                 $array1[$key] = $value;
             }
         }
+
         return $array1;
     }
 
@@ -143,6 +147,7 @@ class Arrays
                     $return .= '</'.$tag.'>';
             }
         }
+
         return $return;
     }
 
@@ -152,6 +157,7 @@ class Arrays
         if (is_array($values) && array_key_exists('params', $values)) {
             $return .= self::convertParams($values['params']);
         }
+
         return $return.'>';
     }
 
@@ -170,6 +176,7 @@ class Arrays
         foreach ($array as $key => $value) {
             $return .= ' '.$key.'="'.$value.'"';
         }
+
         return $return;
     }
 
@@ -183,14 +190,15 @@ class Arrays
                 $return .= '</'.$tag.'>';
             }
         }
+
         return $return;
     }
 
     /**
      * Tests if key:subkey exists in array
-     * @param  array                                           $array
-     * @param  string                                          $key
-     * @param  string                                          $separator
+     * @param  array                                       $array
+     * @param  string                                      $key
+     * @param  string                                      $separator
      * @return boolean
      * @throws \BackBee\Exception\InvalidArgumentException
      */
@@ -210,14 +218,15 @@ class Arrays
             }
             $traverse = $traverse[$key];
         }
+
         return true;
     }
     /**
      * Gets the value of key:subkey in array, NULL othewise
-     * @param  array                                           $array
-     * @param  string                                          $key
-     * @param  mixed                                           $default
-     * @param  string                                          $separator
+     * @param  array                                       $array
+     * @param  string                                      $key
+     * @param  mixed                                       $default
+     * @param  string                                      $separator
      * @return mixed
      * @throws \BackBee\Exception\InvalidArgumentException
      */
@@ -227,6 +236,7 @@ class Arrays
         if (true === self::has($array, $key, $separator, $traverse)) {
             return $traverse;
         }
+
         return $default;
     }
     /**
@@ -260,6 +270,7 @@ class Arrays
                 $result[$key] = $row[$column_key];
             }
         }
+
         return $result;
     }
 }

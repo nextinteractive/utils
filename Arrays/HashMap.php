@@ -24,7 +24,6 @@ namespace BackBee\Utils\Arrays;
  */
 class HashMap implements \IteratorAggregate, \Countable
 {
-
     /**
      * Parameter storage.
      *

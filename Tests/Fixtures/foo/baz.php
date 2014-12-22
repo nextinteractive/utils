@@ -1,1 +1,1 @@
-<?php echo "baz"; ?>
+<?php echo "baz";

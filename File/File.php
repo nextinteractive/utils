@@ -21,7 +21,6 @@ namespace BackBee\Utils\File;
 
 use BackBee\Utils\Exception\InvalidArgumentException;
 use BackBee\Utils\Exception\ApplicationException;
-
 use RegexIterator;
 use RecursiveRegexIterator;
 use RecursiveDirectoryIterator;
@@ -156,7 +155,7 @@ class File
                 foreach ((array) $options['include_path'] as $path) {
                     $path = self::normalizePath($path);
                     if (!is_dir($path)) {
-                        $path = ($basedir) ? $basedir.DIRECTORY_SEPARATOR : ''. $path;
+                        $path = ($basedir) ? $basedir.DIRECTORY_SEPARATOR : ''.$path;
                     }
 
                     if (file_exists($path.DIRECTORY_SEPARATOR.$filename)) {
@@ -178,7 +177,7 @@ class File
     {
         $matches = array();
         if (preg_match('/^(.*)([a-z0-9]{32})\.(.*)$/i', $filename, $matches)) {
-            $filename = $matches[1].implode(DIRECTORY_SEPARATOR, str_split($matches[2], 4)) . '.' . $matches[3];
+            $filename = $matches[1].implode(DIRECTORY_SEPARATOR, str_split($matches[2], 4)).'.'.$matches[3];
         }
 
         self::resolveFilepath($filename, $key, $options);
@@ -216,8 +215,8 @@ class File
 
     /**
      * Makes directory
-     * @param  string                                           $path The directory path
-     * @return boolean                                          Returns TRUE on success
+     * @param  string                                            $path The directory path
+     * @return boolean                                           Returns TRUE on success
      * @throws \BackBee\Utils\Exception\InvalidArgumentException Occures if directory cannot be created
      */
     public static function mkdir($path)
@@ -239,11 +238,11 @@ class File
 
     /**
      * Copies file
-     * @param  string                                           $from The source file path
-     * @param  string                                           $to   The target file path
-     * @return boolean                                          Returns TRUE on success
+     * @param  string                                             $from The source file path
+     * @param  string                                             $to   The target file path
+     * @return boolean                                            Returns TRUE on success
      * @throws \BackBee\Utils\Exception\InvalidArgumentsException Occures if either $from or $to is invalid
-     * @throws \BackBee\Utils\Exception\ApplicationException Occures if the copy fails
+     * @throws \BackBee\Utils\Exception\ApplicationException      Occures if the copy fails
      */
     public static function copy($from, $to)
     {
@@ -269,11 +268,11 @@ class File
 
     /**
      * Moves file
-     * @param  string                                           $from The source file path
-     * @param  string                                           $to   The target file path
-     * @return boolean                                          Returns true on success
+     * @param  string                                            $from The source file path
+     * @param  string                                            $to   The target file path
+     * @return boolean                                           Returns true on success
      * @throws \BackBee\Utils\Exception\InvalidArgumentException Occures if either $from or $to is invalid
-     * @throws \BackBee\Utils\Exception\ApplicationException Occures if $from file can not be deleted
+     * @throws \BackBee\Utils\Exception\ApplicationException     Occures if $from file can not be deleted
      */
     public static function move($from, $to)
     {
@@ -296,8 +295,8 @@ class File
 
     /**
      * Looks recursively in $basedir for files with $extension
-     * @param  string                                          $basedir
-     * @param  string                                          $extension
+     * @param  string                                            $basedir
+     * @param  string                                            $extension
      * @return array
      * @throws \BackBee\Utils\Exception\InvalidArgumentException Occures if $basedir is unreachable
      */
@@ -327,13 +326,14 @@ class File
         }
 
         sort($files);
+
         return $files;
     }
 
     /**
      * Looks in $basedir for files with $extension
-     * @param  string                                          $basedir
-     * @param  string                                          $extension
+     * @param  string                                      $basedir
+     * @param  string                                      $extension
      * @return array
      * @throws \BackBee\Exception\InvalidArgumentException Occures if $basedir is unreachable
      */
@@ -348,26 +348,25 @@ class File
         if (false !== $parse_url && isset($parse_url['scheme'])) {
             foreach (Dir::getContent($basedir) as $file) {
                 if (!is_dir($file) && $extension === substr($file, -1 * strlen($extension))) {
-                    $files[] = $basedir . DIRECTORY_SEPARATOR . $file;
+                    $files[] = $basedir.DIRECTORY_SEPARATOR.$file;
                 }
             }
         } else {
             $pattern = '';
 
-            if(!empty($extension)){
+            if (!empty($extension)) {
                 foreach (str_split($extension) as $letter) {
-                    $pattern .= '[' . strtolower($letter) . strtoupper($letter) . ']';
+                    $pattern .= '['.strtolower($letter).strtoupper($letter).']';
                 }
-                $pattern = $basedir . DIRECTORY_SEPARATOR . '*.' . $pattern;
+                $pattern = $basedir.DIRECTORY_SEPARATOR.'*.'.$pattern;
 
                 $files = glob($pattern);
-
-            }else{
-                $pattern = $basedir . DIRECTORY_SEPARATOR . '*';
+            } else {
+                $pattern = $basedir.DIRECTORY_SEPARATOR.'*';
                 $allFiles = glob($pattern);
 
                 foreach ($allFiles as $filePath) {
-                    if(false === strrpos($filePath, '.')){
+                    if (false === strrpos($filePath, '.')) {
                         $files[] = $filePath;
                     }
                 }
@@ -376,15 +375,16 @@ class File
         }
 
         sort($files);
+
         return $files;
     }
 
     /**
      * Extracts a zip archive into a specified directory
      *
-     * @param  string      $file zip         archive file
-     * @param  string      $destinationDir   where the files will be extracted to
-     * @param  bool        $createDir        should destination dir be created if it doesn't exist
+     * @param  string                                        $file           zip         archive file
+     * @param  string                                        $destinationDir where the files will be extracted to
+     * @param  bool                                          $createDir      should destination dir be created if it doesn't exist
      * @throws \BackBee\Utils\Exception\ApplicationException Occures if there is an issue with $destinationDir
      */
     public static function extractZipArchive($file, $destinationDir, $createDir = false)
@@ -413,7 +413,7 @@ class File
         }
         try {
             $archive->extractTo($destinationDir);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             throw new ApplicationException(sprintf("Could not extract archive from path: %s .", $file));
         }
 
