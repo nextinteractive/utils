@@ -58,6 +58,18 @@ echo Arrays::toBasicXml($users, ';');
  *     </user>
  * </users>
  */
+
+ $tree = [
+    'root' => [
+        'child' => [
+            'subchild' => 'value',
+        ],
+    ],
+];
+
+Arrays::has($tree, 'root:child:subchild'); // return true
+Arrays::has($tree, 'root::child::subchild', '::'); // return true
+Arrays::has($tree, 'root:child:foo'); // return false
 ```
 
 
