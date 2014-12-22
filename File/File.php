@@ -4,7 +4,7 @@
  *
  * This file is part of BackBee.
  *
- * BackBee5 is free software: you can redistribute it and/or modify
+ * BackBee is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -19,8 +19,14 @@
  */
 namespace BackBee\Utils\File;
 
-use BackBee\Exception\BBException;
-use BackBee\Exception\InvalidArgumentsException;
+use BackBee\Utils\Exception\InvalidArgumentException;
+use BackBee\Utils\Exception\ApplicationException;
+
+use RegexIterator;
+use RecursiveRegexIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
 
 /**
  * Set of utility methods to deal with files
@@ -33,7 +39,7 @@ class File
      * Acceptable prefices of SI
      * @var array
      */
-    protected static $_prefixes = array('', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y');
+    protected static $prefixes = array('', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y');
 
     /**
      * Returns canonicalized absolute pathname
@@ -43,6 +49,7 @@ class File
     public static function realpath($path)
     {
         $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+
         if (false === $parse_url = parse_url($path)) {
             return false;
         }
@@ -56,7 +63,9 @@ class File
         }
 
         $parts = [];
-        foreach (explode('/', str_replace(DIRECTORY_SEPARATOR, '/', $parse_url['path'])) as $part) {
+        $pathArray = explode('/', str_replace(DIRECTORY_SEPARATOR, '/', $parse_url['path']));
+
+        foreach ($pathArray as $part) {
             if ('.' === $part) {
                 continue;
             } elseif ('..' === $part) {
@@ -118,12 +127,12 @@ class File
     {
         $result = $size;
         $index = 0;
-        while ($result > 1024 && $index < count(self::$_prefixes)) {
+        while ($result > 1024 && $index < count(self::$prefixes)) {
             $result = $result / 1024;
             $index++;
         }
 
-        return sprintf('%1.'.$precision.'f %sB', $result, self::$_prefixes[$index]);
+        return sprintf('%1.'.$precision.'f %sB', $result, self::$prefixes[$index]);
     }
 
     /**
@@ -147,7 +156,7 @@ class File
                 foreach ((array) $options['include_path'] as $path) {
                     $path = self::normalizePath($path);
                     if (!is_dir($path)) {
-                        $path = ($basedir) ? $basedir.DIRECTORY_SEPARATOR : ''.$path;
+                        $path = ($basedir) ? $basedir.DIRECTORY_SEPARATOR : ''. $path;
                     }
 
                     if (file_exists($path.DIRECTORY_SEPARATOR.$filename)) {
@@ -155,7 +164,7 @@ class File
                         break;
                     }
                 }
-            } elseif ('' != $basedir) {
+            } elseif (!empty($basedir)) {
                 $filename = $basedir.DIRECTORY_SEPARATOR.$filename;
             }
         }
@@ -169,7 +178,7 @@ class File
     {
         $matches = array();
         if (preg_match('/^(.*)([a-z0-9]{32})\.(.*)$/i', $filename, $matches)) {
-            $filename = $matches[1].implode(DIRECTORY_SEPARATOR, str_split($matches[2], 4)).'.'.$matches[3];
+            $filename = $matches[1].implode(DIRECTORY_SEPARATOR, str_split($matches[2], 4)) . '.' . $matches[3];
         }
 
         self::resolveFilepath($filename, $key, $options);
@@ -209,7 +218,7 @@ class File
      * Makes directory
      * @param  string                                           $path The directory path
      * @return boolean                                          Returns TRUE on success
-     * @throws \BackBee\Exception\InvalidArgumentsException Occurs if directory cannot be created
+     * @throws \BackBee\Utils\Exception\InvalidArgumentException Occures if directory cannot be created
      */
     public static function mkdir($path)
     {
@@ -218,11 +227,11 @@ class File
                 return true;
             }
 
-            throw new InvalidArgumentsException(sprintf('Directory `%s` already exists and is no writable.', $path));
+            throw new InvalidArgumentException(sprintf("Directory %s already exists and is no writable.", $path));
         }
 
         if (!is_writable(dirname($path)) || false === @mkdir($path, 0755, true)) {
-            throw new InvalidArgumentsException(sprintf('Unable to create directory `%s`.', $path));
+            throw new InvalidArgumentException(sprintf("Unable to create directory %s.", $path));
         }
 
         return true;
@@ -233,17 +242,17 @@ class File
      * @param  string                                           $from The source file path
      * @param  string                                           $to   The target file path
      * @return boolean                                          Returns TRUE on success
-     * @throws \BackBee\Exception\InvalidArgumentsException Occurs if either $from or $to is invalid
-     * @throws \BackBee\Exception\BBException               Occurs if the copy can not be done
+     * @throws \BackBee\Utils\Exception\InvalidArgumentsException Occures if either $from or $to is invalid
+     * @throws \BackBee\Utils\Exception\ApplicationException Occures if the copy fails
      */
     public static function copy($from, $to)
     {
         if (false === $frompath = self::realpath($from)) {
-            throw new InvalidArgumentsException(sprintf('The file `%s` cannot be accessed', $from));
+            throw new InvalidArgumentException(sprintf("The file %s cannot be accessed.", $from));
         }
 
         if (!is_readable($frompath) || is_dir($frompath)) {
-            throw new InvalidArgumentsException(sprintf('The file `%s` doesn\'t exist or cannot be read', $from));
+            throw new InvalidArgumentException(sprintf("The file %s doesn't exists or cannot be read.", $from));
         }
 
         $topath = self::normalizePath($to);
@@ -252,7 +261,7 @@ class File
         }
 
         if (false === @copy($frompath, $topath)) {
-            throw new BBException(sprintf('Enable to copy file `%s` to `%s`.', $from, $to));
+            throw new ApplicationException(sprintf("Enable to copy file %s to %s.", $from, $to));
         }
 
         return true;
@@ -263,23 +272,23 @@ class File
      * @param  string                                           $from The source file path
      * @param  string                                           $to   The target file path
      * @return boolean                                          Returns TRUE on success
-     * @throws \BackBee\Exception\InvalidArgumentsException Occurs if either $from or $to is invalid
-     * @throws \BackBee\Exception\BBException               Occurs if $from can not be deleted
+     * @throws \BackBee\Utils\Exception\InvalidArgumentException Occures if either $from or $to is invalid
+     * @throws \BackBee\Utils\Exception\ApplicationException Occures if $from file can not be deleted
      */
     public static function move($from, $to)
     {
         if (false === $frompath = self::realpath($from)) {
-            throw new InvalidArgumentsException(sprintf('The file `%s` cannot be accessed', $from));
+            throw new InvalidArgumentException(sprintf("The file %s cannot be accessed.", $from));
         }
 
         if (!is_writable($frompath) || is_dir($frompath)) {
-            throw new InvalidArgumentsException(sprintf('The file `%s` doesn\'t exist or cannot be write', $from));
+            throw new InvalidArgumentException(sprintf("The file %s doesn't exists or cannot be written.", $from));
         }
 
         self::copy($from, $to);
 
         if (false === @unlink($frompath)) {
-            throw new BBException(sprintf('Enable to delete file `%s`.', $from));
+            throw new ApplicationException(sprintf("Enable to delete file %s.", $from));
         }
 
         return true;
@@ -290,19 +299,19 @@ class File
      * @param  string                                          $basedir
      * @param  string                                          $extension
      * @return array
-     * @throws \BackBee\Exception\InvalidArgumentException Occures if $basedir is unreachable
+     * @throws \BackBee\Utils\Exception\InvalidArgumentException Occures if $basedir is unreachable
      */
     public static function getFilesRecursivelyByExtension($basedir, $extension)
     {
         if (!is_readable($basedir)) {
-            throw new \BackBee\Exception\InvalidArgumentException(sprintf('Cannot read the directory %s', $basedir));
+            throw new InvalidArgumentException(sprintf("Cannot read the directory %s .", $basedir));
         }
 
         $files = [];
         $parse_url = parse_url($basedir);
-        /* if (false !== $parse_url && isset($parse_url['scheme'])) { */
-        $directory = new \RecursiveDirectoryIterator($basedir);
-        $iterator = new \RecursiveIteratorIterator($directory);
+
+        $directory = new RecursiveDirectoryIterator($basedir);
+        $iterator = new RecursiveIteratorIterator($directory);
 
         if (empty($extension)) {
             // extension is empty - assume user wants files without extension only
@@ -311,20 +320,11 @@ class File
             $regex = '#^.+\.'.ltrim($extension, '.').'$#i';
         }
 
-        $regex = new \RegexIterator($iterator, $regex, \RecursiveRegexIterator::GET_MATCH);
+        $regex = new RegexIterator($iterator, $regex, RecursiveRegexIterator::GET_MATCH);
 
         foreach ($regex as $file) {
             $files[] = $file[0];
         }
-        /* } else {
-          $pattern = '';
-          foreach (str_split($extension) as $letter) {
-          $pattern .= '[' . strtolower($letter) . strtoupper($letter) . ']';
-          }
-
-          $pattern = $basedir . DIRECTORY_SEPARATOR . '{*,*' . DIRECTORY_SEPARATOR . '*}.' . $pattern;
-          $files = glob($pattern, GLOB_BRACE);
-          } */
 
         return $files;
     }
@@ -339,7 +339,7 @@ class File
     public static function getFilesByExtension($basedir, $extension)
     {
         if (!is_readable($basedir)) {
-            throw new \BackBee\Exception\InvalidArgumentException(sprintf('Cannot read the directory %s', $basedir));
+            throw new InvalidArgumentException(sprintf('Cannot read the directory %s', $basedir));
         }
 
         $files = [];
@@ -348,22 +348,16 @@ class File
         if (false !== $parse_url && isset($parse_url['scheme'])) {
             foreach (Dir::getContent($basedir) as $file) {
                 if (!is_dir($file) && $extension === substr($file, -1 * strlen($extension))) {
-                    $files[] = $basedir.'/'.$file;
+                    $files[] = $basedir . '/' . $file;
                 }
             }
-// @TODO to be refactor
-//            $directory = new \DirectoryIterator($basedir);
-//            $regex = new \RegexIterator($directory, '/^.+\.' . $extension . '$/i', \RecursiveRegexIterator::GET_MATCH);
-//            foreach ($regex as $file) {
-//                $files[] = $file[0];
-//            }
         } else {
             $pattern = '';
             foreach (str_split($extension) as $letter) {
-                $pattern .= '['.strtolower($letter).strtoupper($letter).']';
+                $pattern .= '[' . strtolower($letter) . strtoupper($letter) . ']';
             }
 
-            $pattern = $basedir.DIRECTORY_SEPARATOR.'*.'.$pattern;
+            $pattern = $basedir . DIRECTORY_SEPARATOR . '*.' . $pattern;
             $files = glob($pattern);
         }
 
@@ -373,38 +367,38 @@ class File
     /**
      * Extracts a zip archive into a specified directory
      *
-     * @param $file - zip archive file
-     * @param  type       $destinationDir - where the files will be extracted to
-     * @param  bool       $createDir      - should destination dir be created if it doesn't exist
-     * @throws \Exception
+     * @param  string      $file zip         archive file
+     * @param  string      $destinationDir   where the files will be extracted to
+     * @param  bool        $createDir        should destination dir be created if it doesn't exist
+     * @throws \BackBee\Utils\Exception\ApplicationException Occures if there is an issue with $destinationDir
      */
     public static function extractZipArchive($file, $destinationDir, $createDir = false)
     {
         if (!file_exists($destinationDir)) {
             if (false == $createDir) {
-                throw new \Exception('Destination directory does not exist: '.$destinationDir);
+                throw new ApplicationException(sprintf("Destination directory does not exist: %s .", $destinationDir));
             }
 
-            $res = mkdir($destinationDir, 0777, true);
-            if (false === $res) {
-                throw new \Exception('Destination directory cannot be created: '.$destinationDir);
+            $folderCreation = mkdir($destinationDir, 0777, true);
+            if (false === $folderCreation) {
+                throw new ApplicationException(sprintf("Destination directory cannot be created: %s .", $destinationDir));
             }
 
             if (!is_readable($destinationDir)) {
-                throw new \Exception('Destination directory is not readable: '.$destinationDir);
+                throw new ApplicationException(sprintf("Destination directory is not readable: %s .", $destinationDir));
             }
         } elseif (!is_dir($destinationDir)) {
-            throw new \Exception('Destination directory cannot be created as a file with that name already exists: '.$destinationDir);
+            throw new ApplicationException(sprintf("Destination directory cannot be created as a file with that name already exists: %s .", $destinationDir));
         }
 
-        $archive = new \ZipArchive();
+        $archive = new ZipArchive();
 
         if (false === $archive->open($file)) {
-            throw new \Exception('Could not open archive: '.$archive);
+            throw new ApplicationException(sprintf("Could not open archive: %s .", $archive));
         }
 
         if (false === $archive->extractTo($destinationDir)) {
-            throw new \Exception('Could not extract archive: '.$archive);
+            throw new ApplicationException(sprintf("Could not extract archive: %s .", $archive));
         }
 
         $archive->close();

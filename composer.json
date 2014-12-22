@@ -1,5 +1,5 @@
 {
-    "name": "backbee/tools",
+    "name": "backbee/utils",
     "description": "BackBee tools library for php",
     "keywords": ["tools", "utilities", "array manipulation", "string manipulation"],
     "type": "library",
@@ -11,10 +11,10 @@
     }
     ],
     "require": {
-        "php": ">=5.4.4",
+        "php": ">=5.4.4"
     },
     "autoload": {
-        "psr-4": {"BackBee\\Tools\\": ""}
+        "psr-4": {"BackBee\\Utils\\": ""}
     },
     "minimum-stability": "stable",
     "extra": {

@@ -2,7 +2,7 @@
 
 namespace BackBee\Utils\Tests;
 
-use BackBee\Utils\Array\ArrayPaginator;
+use BackBee\Utils\Arrays\ArrayPaginator;
 
 /**
  * @author      Flavia Fodor

@@ -2,7 +2,7 @@
 
 namespace BackBee\Utils\Test;
 
-use BackBee\Utils\Arrays;
+use BackBee\Utils\Arrays\Arrays;
 
 /**
  * @author      c.rouillon <rouillon.charles@gmail.com>
