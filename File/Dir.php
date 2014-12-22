@@ -79,7 +79,7 @@ class Dir
 
             return $files;
         } else {
-            throw new \Exception('Incorect path "'.$path.'" name in '.__FILE__.' at line '.__LINE__);
+            throw new \Exception(sprintf('Incorrect path "%s" name in %s at line %s', $path, __FILE__, __LINE__));
         }
     }
 

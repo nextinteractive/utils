@@ -53,15 +53,8 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContent()
     {
-        /*$test_dir = vfsStream::setup('test_dir');
-        $path_dir = vfsStream::url('test_dir');
-
-        $arr1 = array_diff(scandir($path_dir), array('.', '..'));
-        $arr2 = Dir::getContent($path_dir);
-
-        $this->assertTrue(is_array($arr2));
-        $this->assertEquals($arr2, $arr1);
-        */
+        $array = Dir::getContent($this->getFixturesFolder());
+        $this->assertInternalType('array', $array);
     }
 
     /**
