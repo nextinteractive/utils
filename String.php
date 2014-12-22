@@ -59,9 +59,13 @@ class String
         if (mb_detect_encoding($str, 'UTF-8', true) === false) {
             $str = utf8_encode($str);
         }
-        iconv_set_encoding('input_encoding', 'UTF-8');
-        iconv_set_encoding('internal_encoding', 'UTF-8');
-        iconv_set_encoding('output_encoding', $charset);
+
+        if (version_compare(PHP_VERSION, '5.6.0') < 0) {
+            iconv_set_encoding('input_encoding', 'UTF-8');
+            iconv_set_encoding('internal_encoding', 'UTF-8');
+            iconv_set_encoding('output_encoding', $charset);
+        }
+
         $str = html_entity_decode($str, ENT_QUOTES, $charset);
         $strlen = iconv_strlen($str, $charset);
         for ($i = 0; $i < $strlen; $i++) {

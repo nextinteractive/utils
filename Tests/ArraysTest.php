@@ -6,6 +6,7 @@ use BackBee\Utils\Arrays\Arrays;
 
 /**
  * @author      c.rouillon <rouillon.charles@gmail.com>
+ * @author      Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
  */
 class ArraysTest extends \PHPUnit_Framework_TestCase
 {
