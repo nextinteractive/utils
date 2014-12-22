@@ -89,15 +89,11 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     public function testMove()
     {
-        /*$dir_mode = 0777;
-        $vfs_dir = vfsStream::setup('dirstart', $dir_mode, array('startfile' => 'start data'));
-        $start_path = vfsStream::url('dirstart');
+        $directoryMode = 0777;
+        mkdir($this->getFixturesFolder().'archive2');
 
-        $copy_path = $this->copy_path;
-
-        $dir_path = Dir::move($start_path, $copy_path, $dir_mode);
-
-        $this->assertEquals(true, $dir_path);*/
+        $this->assertTrue(Dir::move($this->getFixturesFolder().'archive2', $this->getFixturesFolder().'archive3', $directoryMode));
+        Dir::delete($this->getFixturesFolder().'archive3');
     }
 
     public function testCallback2ParamsMove()
