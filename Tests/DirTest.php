@@ -18,7 +18,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     public function testCopy()
     {
-        $copyPath = $this->getFixturesFolder() . 'archive2';
+        $copyPath = $this->getFixturesFolder().'archive2';
         $directoryPath = Dir::copy($this->copyFolder, $copyPath);
 
         $this->assertEquals(true, $directoryPath);
@@ -67,24 +67,24 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     public function testIsArrayGetContent()
     {
-        /*$test_dir = vfsStream::setup('test_dir', 0777, array('file1' => 'file1 data', 'file2' => 'file2 data'));
-        $path_dir = vfsStream::url('test_dir');
-
-        $res = Dir::getContent($path_dir);
-        $this->assertTrue(is_array($res));
-        */
+        $this->assertInternalType('array', Dir::getContent($this->getFixturesFolder().'foo'));
     }
 
     public function testDelete()
     {
-        /*vfsStream::setup('test_dir');
-        $path_dir = vfsStream::url('test_dir');
+        mkdir($this->getFixturesFolder().'archive2');
+        $folderToDelete = $this->getFixturesFolder().'archive2';
+        $this->assertTrue(Dir::delete($folderToDelete));
+        $this->assertFileNotExists($folderToDelete);
+    }
 
-        $res = Dir::delete($path_dir);
-
-        $this->assertEquals(true, $res);
-        $this->assertFileNotExists($path_dir);
-        */
+    /**
+     * @expectedException PHPUnit_Framework_Error_Warning
+     */
+    public function testDeleteFails()
+    {
+        $this->assertFalse(Dir::delete($this->privatePath));
+        $this->assertFileExists($this->privatePath);
     }
 
     public function testMove()
