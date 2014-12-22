@@ -121,15 +121,17 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFilesByExtension()
     {
-        /*$vfs_dir = vfsStream::setup('dircopy', 0775, array('copyfile.txt' => 'copy data', 'file2.txt' => 'copy data', 'file3.php' => 'copy data', 'file4.yml' => 'copy data'));
-        $path = vfsStream::url('dircopy');
+        $this->assertEquals(
+            [
+                $this->folderPath . DIRECTORY_SEPARATOR . 'bar.txt',
+                $this->folderPath . DIRECTORY_SEPARATOR . 'foo.txt'
+            ], File::getFilesByExtension($this->folderPath, 'txt')
+        );
 
-        $this->assertEquals(array('vfs://dircopy'.DIRECTORY_SEPARATOR.'copyfile.txt', 'vfs://dircopy'.DIRECTORY_SEPARATOR.'file2.txt'), File::getFilesByExtension($path, 'txt'));
-        $this->assertEquals(array('vfs://dircopy'.DIRECTORY_SEPARATOR.'file3.php'), File::getFilesByExtension($path, 'php'));
-        $this->assertEquals(array('vfs://dircopy'.DIRECTORY_SEPARATOR.'file4.yml'), File::getFilesByExtension($path, 'yml'));
-        $this->assertEquals(array(), File::getFilesByExtension($path, ''));
-        $this->assertEquals(array(), File::getFilesByExtension($path, 'aaa'));
-        */
+        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'baz.php'], File::getFilesByExtension($this->folderPath, 'php'));
+        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'backbee.yml'], File::getFilesByExtension($this->folderPath, 'yml'));
+        $this->assertEquals([$this->folderPath . DIRECTORY_SEPARATOR . 'noextension'], File::getFilesByExtension($this->folderPath, ''));
+        $this->assertEquals([], File::getFilesByExtension($this->folderPath, 'aaa'));
     }
 
     /**

@@ -331,7 +331,7 @@ class File
     }
 
     /**
-     * Looks recursively in $basedir for files with $extension
+     * Looks in $basedir for files with $extension
      * @param  string                                          $basedir
      * @param  string                                          $extension
      * @return array
@@ -345,23 +345,37 @@ class File
 
         $files = [];
         $parse_url = parse_url($basedir);
-
         if (false !== $parse_url && isset($parse_url['scheme'])) {
             foreach (Dir::getContent($basedir) as $file) {
                 if (!is_dir($file) && $extension === substr($file, -1 * strlen($extension))) {
-                    $files[] = $basedir . '/' . $file;
+                    $files[] = $basedir . DIRECTORY_SEPARATOR . $file;
                 }
             }
         } else {
             $pattern = '';
-            foreach (str_split($extension) as $letter) {
-                $pattern .= '[' . strtolower($letter) . strtoupper($letter) . ']';
-            }
 
-            $pattern = $basedir . DIRECTORY_SEPARATOR . '*.' . $pattern;
-            $files = glob($pattern);
+            if(!empty($extension)){
+                foreach (str_split($extension) as $letter) {
+                    $pattern .= '[' . strtolower($letter) . strtoupper($letter) . ']';
+                }
+                $pattern = $basedir . DIRECTORY_SEPARATOR . '*.' . $pattern;
+
+                $files = glob($pattern);
+
+            }else{
+                $pattern = $basedir . DIRECTORY_SEPARATOR . '*';
+                $allFiles = glob($pattern);
+
+                foreach ($allFiles as $filePath) {
+                    if(false === strrpos($filePath, '.')){
+                        $files[] = $filePath;
+                    }
+                }
+                unset($allFiles);
+            }
         }
 
+        sort($files);
         return $files;
     }
 
