@@ -21,9 +21,22 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testRealpath()
     {
         $this->assertEquals(__DIR__.DIRECTORY_SEPARATOR.'FileTest.php', File::realpath(__DIR__.DIRECTORY_SEPARATOR."FileTest.php"));
-        $this->assertEquals(false, File::realpath(DIRECTORY_SEPARATOR."FileTest.php"));
+        $this->assertFalse(File::realpath(DIRECTORY_SEPARATOR."FileTest.php"));
 
         $this->assertEquals($this->folderPath, File::realpath($this->folderPath));
+    }
+
+    public function testRealPathMalformedUrl()
+    {
+        $this->assertFalse(File::realpath('http://www..com/'));
+    }
+
+    /**
+     * @link http://php.net/manual/en/function.parse-url.php
+     */
+    public function testRealPathWithoutScheme()
+    {
+        $this->assertFalse(File::realpath('//www.example.com/path?googleguy=googley'));
     }
 
     public function testNormalizePath()
