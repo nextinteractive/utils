@@ -38,6 +38,12 @@ echo Arrays::toCsv($users, ';');
  * Eric;developper
  */
 
+$users = ['users' => [
+    'user' => ['name' => 'Charles', 'role' => 'lead developper'],
+    'user' => ['name' => 'Eric', 'role' => 'developper'],
+    ],
+];
+
 echo Arrays::toBasicXml($users, ';');
 
 /**
