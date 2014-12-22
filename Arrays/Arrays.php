@@ -26,11 +26,16 @@ class Arrays
 {
     const LINE_RETURN = "\n";
 
+    /**
+     * @todo throw an exception if $values in not a good input
+     */
     public static function toCsv($values, $separator = ';')
     {
         $return = '';
         foreach ($values as $value) {
-            $return .= implode($separator, $value).self::LINE_RETURN;
+            if (is_array($value)) {
+                $return .= implode($separator, $value).self::LINE_RETURN;
+            }
         }
 
         return $return;

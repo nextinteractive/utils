@@ -163,10 +163,21 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     public function testToCsv()
     {
         $array = [0 => ['name' => 'Charles', 'role' => 'lead developper'],
-            1 => ['name' => 'Eric', 'role' => 'developper']
+            1 => ['name' => 'Eric', 'role' => 'developper'],
         ];
 
         $this->assertSame("Charles;lead developper\nEric;developper\n", Arrays::toCsv($array));
+    }
+
+    public function testToBasicXml()
+    {
+        $array = ['users' => [
+            'user' => ['name' => 'Charles', 'role' => 'lead developper'],
+            'user' => ['name' => 'Eric', 'role' => 'developper'],
+            ],
+        ];
+
+        $this->assertSame('<users><user><name>Eric</name><role>developper</role></user></users>', Arrays::toBasicXml($array));
     }
 
     public function tearDown()
