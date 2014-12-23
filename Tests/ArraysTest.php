@@ -1,5 +1,22 @@
 <?php
-
+/*
+ * Copyright (c) 2011-2014 Lp digital system
+ *
+ * This file is part of BackBee.
+ *
+ * BackBee5 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * BackBee is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with BackBee. If not, see <http://www.gnu.org/licenses/>.
+ */
 namespace BackBee\Utils\Test;
 
 use BackBee\Utils\Arrays\Arrays;
@@ -256,6 +273,11 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $unknown = ['users' => [
+            4 => ['name' => 'Unknown', 'role' => 'tester'],
+            ],
+        ];
+
         $expectedResult = ['users' => [
             1 => ['name' => 'Charles', 'role' => 'lead developper'],
             2 => ['name' => 'Eric', 'role' => 'developper'],
@@ -263,8 +285,14 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
         ];
 
         Arrays::array_remove_assoc_recursive($allUsers, $nicolas);
-
         $this->assertSame($allUsers, $expectedResult);
+
+        Arrays::array_remove_assoc_recursive($expectedResult, $unknown);
+        $this->assertSame($expectedResult, ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            ],
+        ]);
     }
 
     public function tearDown()
