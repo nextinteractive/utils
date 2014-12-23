@@ -21,7 +21,7 @@ namespace BackBee\Utils\Tests;
 
 use BackBee\Utils\File\Dir;
 
-class DirTest extends \PHPUnit_Framework_TestCase
+class DirTest extends UtilsTest
 {
     private $copyFolder;
     private $privateFolder;
@@ -136,11 +136,6 @@ class DirTest extends \PHPUnit_Framework_TestCase
         $dir_path = Dir::move($start_path, $copy_path, $dir_mode, array('getContent', $start_path, $copy_path, $dir_mode));
         $this->assertEquals(true, $dir_path);
         */
-    }
-
-    private function getFixturesFolder()
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR;
     }
 
     public function tearDown()

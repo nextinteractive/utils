@@ -21,7 +21,7 @@ namespace BackBee\Utils\Tests;
 
 use BackBee\Utils\File\File;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends UtilsTest
 {
     private $folderPath;
     private $privatePath;
@@ -195,11 +195,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $twigFilePath = $this->getFixturesFolder().'file.twig';
         File::resolveFilepath($twigFilePath);
         $this->assertEquals($this->getFixturesFolder().'file.twig', $twigFilePath);
-    }
-
-    private function getFixturesFolder()
-    {
-        return __DIR__.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR;
     }
 
     public function tearDown()

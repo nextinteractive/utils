@@ -86,6 +86,7 @@ class HashMap implements \IteratorAggregate, \Countable
      *
      * @param string $key     The key
      * @param mixed  $default The default value
+     * @todo Implement recursive search on the array who contains arrays
      */
     public function get($key, $default = null)
     {

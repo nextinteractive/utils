@@ -1,0 +1,25 @@
+firewalls:
+    rest_api_area:
+        pattern: ^/rest
+        requirements:
+            HTTP-X-API-SIGNATURE: \w+
+            HTTP-X-API-KEY: \w+
+        provider: public_key
+        public_key: ~
+        restful:
+            provider: bb_user
+            nonce_dir: security/nonces
+            lifetime: 1800
+            use_registry: true
+        anonymous: ~
+    bb_area:
+        pattern: ^/
+        requirements:
+            HTTP-X-Requested-With: XMLHttpRequest
+            HTTP-X-BB-METHOD: (JsonRpc|Upload)
+        provider: bb_user
+        bb_auth:
+            provider: bb_user
+            nonce_dir: security/nonces
+            lifetime: 1800
+            use_registry: true
