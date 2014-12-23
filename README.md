@@ -11,8 +11,8 @@ This contains a lot of useful methods to manipulate files, arrays and strings.
 [![Code Coverage](https://scrutinizer-ci.com/g/backbee/utils/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/backbee/utils/?branch=master)
 
 
-1) Arrays
----------
+1) Collection
+-----------------
 
 PHP is one of the more convenient programming language to work with arrays
 despite the inconsistency of the API.
@@ -24,13 +24,13 @@ Example:
 
 ```php
 require_once('some_autoloader.php');
-use BackBee\Utils\Arrays;
+use BackBee\Utils\Collection\Collection;
 
 $users = [0 => ['name' => 'Charles', 'role' => 'lead developper'],
     1 => ['name' => 'Eric', 'role' => 'developper'],
 ];
 
-echo Arrays::toCsv($users, ';');
+echo Collection::toCsv($users, ';');
 
 /**
  * Will return:
@@ -44,7 +44,7 @@ $users = ['users' => [
     ],
 ];
 
-echo Arrays::toBasicXml($users, ';');
+echo Collection::toBasicXml($users, ';');
 
 /**
  * <users>
@@ -67,9 +67,43 @@ echo Arrays::toBasicXml($users, ';');
     ],
 ];
 
-Arrays::has($tree, 'root:child:subchild'); // return true
-Arrays::has($tree, 'root::child::subchild', '::'); // return true
-Arrays::has($tree, 'root:child:foo'); // return false
+Collection::has($tree, 'root:child:subchild'); // return true
+Collection::has($tree, 'root::child::subchild', '::'); // return true
+Collection::has($tree, 'root:child:foo'); // return false
 ```
 
+2) Strings
+-------------
 
+We have added to this library some methods to ease encoding operations.
+We provide also some useful functions to handle with strings which have particular meanings like file size or path, urls.
+
+Example:
+
+```php
+require_once('some_autoloader.php');
+use BackBee\Utils\String;
+
+/**
+ * Some helpers for encoding operations
+ */
+mb_detect_encoding(String::toASCII('BackBee')); // "ASCII"
+mb_detect_encoding(String::toUTF8('w�ird')); // "UTF-8"
+
+/**
+ * Some normalizers for filepaths and urls
+ */
+$options = ['extension' => '.txt', 'spacereplace' => '_'];
+String::toPath('test path', $options)); // "test_path.txt"
+
+$options = ['extension' => '.com', 'spacereplace' => '_'];
+String::urlize('test`s url', $options); // "tests_url.com"
+
+/**
+ * Convenients formatters for file size
+ */
+String::formatBytes(2000, 3); // "1.953 kb"
+String::formatBytes(567000, 5); // "553.71094 kb"
+String::formatBytes(567000); // "553.71 kb"
+String::formatBytes(5670008902); // "5.28 gb"
+```
