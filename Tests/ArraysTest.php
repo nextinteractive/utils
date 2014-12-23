@@ -218,6 +218,55 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Arrays::array_diff_assoc_recursive($users2, $users), $diff2);
     }
 
+    public function testArrayMergeAssocRecursive()
+    {
+        $users = ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            ],
+        ];
+
+        $users2 = ['users' => [
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+            ],
+        ];
+
+        $mergedUsers = ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+            ],
+        ];
+
+        $this->assertSame(Arrays::array_merge_assoc_recursive($users, $users2), $mergedUsers);
+    }
+
+    public function testArrayRemoveAssocRecursive()
+    {
+        $allUsers = ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+            ],
+        ];
+
+        $nicolas = ['users' => [
+            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+            ],
+        ];
+
+        $expectedResult = ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            ],
+        ];
+
+        Arrays::array_remove_assoc_recursive($allUsers, $nicolas);
+
+        $this->assertSame($allUsers, $expectedResult);
+    }
+
     public function tearDown()
     {
         $this->mock = null;

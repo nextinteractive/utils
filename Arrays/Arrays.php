@@ -98,6 +98,7 @@ class Arrays
     }
 
     /**
+     * Merge array2 into array1 without duplicates
      * @param  array $array1
      * @param  array $array2
      * @return array
@@ -118,9 +119,10 @@ class Arrays
     }
 
     /**
-     * @param  [type] $array1
-     * @param  [type] $array2
-     * @return [type]
+     * Remove array2 from array1
+     * @param  array $array1
+     * @param  array $array2
+     * @return array
      */
     public static function array_remove_assoc_recursive(&$array1, $array2)
     {
