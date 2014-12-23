@@ -67,6 +67,11 @@ class Arrays
     }
 
     /**
+     * Returns an array who contains only the differences of array1
+     * compared to array2.
+     * be careful, array_diff_assoc_recursive(array1, array2) may be different
+     * result from array_diff_assoc_recursive(array2, array1)
+     *
      * @param  array $array1
      * @param  array $array2
      * @return array

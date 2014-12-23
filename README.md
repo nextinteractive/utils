@@ -39,8 +39,8 @@ echo Arrays::toCsv($users, ';');
  */
 
 $users = ['users' => [
-    'user' => ['name' => 'Charles', 'role' => 'lead developper'],
-    'user' => ['name' => 'Eric', 'role' => 'developper'],
+    0 => ['name' => 'Charles', 'role' => 'lead developper'],
+    1 => ['name' => 'Eric', 'role' => 'developper'],
     ],
 ];
 
@@ -48,14 +48,14 @@ echo Arrays::toBasicXml($users, ';');
 
 /**
  * <users>
- *     <user>
+ *     <0>
  *        <name>Eric</name>
  *        <role>developper</role>
- *     </user>
- *     <user>
+ *     </0>
+ *     <1>
  *        <name>Charles</name>
  *        <role>lead developper</role>
- *     </user>
+ *     </1>
  * </users>
  */
 

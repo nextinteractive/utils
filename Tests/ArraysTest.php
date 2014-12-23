@@ -173,12 +173,49 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
     public function testToBasicXml()
     {
         $users = ['users' => [
-            'user' => ['name' => 'Charles', 'role' => 'lead developper'],
-            'user' => ['name' => 'Eric', 'role' => 'developper'],
+            0 => ['name' => 'Charles', 'role' => 'lead developper'],
+            1 => ['name' => 'Eric', 'role' => 'developper'],
             ],
         ];
 
-        $this->assertSame('<users><user><name>Eric</name><role>developper</role></user></users>', Arrays::toBasicXml($users));
+        $this->assertSame('<users><0><name>Charles</name><role>lead developper</role></0><1><name>Eric</name><role>developper</role></1></users>', Arrays::toBasicXml($users));
+    }
+
+    public function testToXml()
+    {
+        $users = ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper', 'drink' => 'milk & chocolate'],
+            ],
+        ];
+
+        $xmlReturn = '<users><1><name>Charles</name><role>lead developper</role></1><2><name>Eric</name><role>developper</role><drink>milk &amp; chocolate</drink></2></users>';
+        $this->assertSame($xmlReturn, Arrays::toXml($users));
+    }
+
+    public function testArrayDiffAssocRecursive()
+    {
+        $users = ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            ],
+        ];
+
+        $users2 = ['users' => [
+            1 => ['name' => 'Charles', 'role' => 'lead developper'],
+            2 => ['name' => 'Eric', 'role' => 'developper'],
+            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+            ],
+        ];
+
+        $diff1 = [ ];
+        $diff2 = ['users' => [
+            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+            ],
+        ];
+
+        $this->assertSame(Arrays::array_diff_assoc_recursive($users, $users2), $diff1);
+        $this->assertSame(Arrays::array_diff_assoc_recursive($users2, $users), $diff2);
     }
 
     public function tearDown()
