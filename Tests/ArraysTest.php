@@ -19,13 +19,13 @@
  */
 namespace BackBee\Utils\Test;
 
-use BackBee\Utils\Arrays\Arrays;
+use BackBee\Utils\Collection\Collection;
 
 /**
  * @author      c.rouillon <rouillon.charles@gmail.com>
  * @author      Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
  */
-class ArraysTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var array
@@ -48,11 +48,11 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
 
     public function testHas()
     {
-        $this->assertTrue(Arrays::has($this->mock, 'key:subkey:subsubkey'));
-        $this->assertFalse(Arrays::has($this->mock, 'key:subkey:unknown'));
-        $this->assertFalse(Arrays::has($this->mock, 'key:subkey:subsubkey:unknown'));
-        $this->assertTrue(Arrays::has($this->mock, 'key::subkey::subsubkey', '::'));
-        $this->assertFalse(Arrays::has($this->mock, 'key:subkey:subsubkey', '::'));
+        $this->assertTrue(Collection::has($this->mock, 'key:subkey:subsubkey'));
+        $this->assertFalse(Collection::has($this->mock, 'key:subkey:unknown'));
+        $this->assertFalse(Collection::has($this->mock, 'key:subkey:subsubkey:unknown'));
+        $this->assertTrue(Collection::has($this->mock, 'key::subkey::subsubkey', '::'));
+        $this->assertFalse(Collection::has($this->mock, 'key:subkey:subsubkey', '::'));
     }
 
     /**
@@ -60,7 +60,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasWithInvalidKey()
     {
-        $this->assertTrue(Arrays::has($this->mock, new \stdClass()));
+        $this->assertTrue(Collection::has($this->mock, new \stdClass()));
     }
 
     /**
@@ -68,24 +68,24 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasWithInvalidSeparator()
     {
-        $this->assertTrue(Arrays::has($this->mock, 'key', new \stdClass()));
+        $this->assertTrue(Collection::has($this->mock, 'key', new \stdClass()));
     }
 
     public function testGet()
     {
-        $this->assertEquals('value', Arrays::get($this->mock, 'key:subkey:subsubkey'));
-        $this->assertNull(Arrays::get($this->mock, 'key:subkey:unknown'));
-        $this->assertNull(Arrays::get($this->mock, 'key:subkey:subsubkey:unknown'));
-        $this->assertEquals('default', Arrays::get($this->mock, 'key:subkey:subsubkey:unknown', 'default'));
-        $this->assertEquals('value', Arrays::get($this->mock, 'key::subkey::subsubkey', null, '::'));
-        $this->assertNull(Arrays::get($this->mock, 'key:subkey:subsubkey', null, '::'));
+        $this->assertEquals('value', Collection::get($this->mock, 'key:subkey:subsubkey'));
+        $this->assertNull(Collection::get($this->mock, 'key:subkey:unknown'));
+        $this->assertNull(Collection::get($this->mock, 'key:subkey:subsubkey:unknown'));
+        $this->assertEquals('default', Collection::get($this->mock, 'key:subkey:subsubkey:unknown', 'default'));
+        $this->assertEquals('value', Collection::get($this->mock, 'key::subkey::subsubkey', null, '::'));
+        $this->assertNull(Collection::get($this->mock, 'key:subkey:subsubkey', null, '::'));
 
         $result = [
             'subkey' => [
                 'subsubkey' => 'value',
             ],
         ];
-        $this->assertEquals($result, Arrays::get($this->mock, 'key'));
+        $this->assertEquals($result, Collection::get($this->mock, 'key'));
     }
 
     /**
@@ -93,7 +93,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithInvalidKey()
     {
-        $this->assertTrue(Arrays::get($this->mock, new \stdClass()));
+        $this->assertTrue(Collection::get($this->mock, new \stdClass()));
     }
 
     /**
@@ -101,7 +101,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithInvalidSeparator()
     {
-        $this->assertTrue(Arrays::get($this->mock, 'key', null, new \stdClass()));
+        $this->assertTrue(Collection::get($this->mock, 'key', null, new \stdClass()));
     }
 
     public function testArray_column()
@@ -151,9 +151,9 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
                 'first_name' => 'Peter',
                 'last_name' => 'Doe',
             ],
-        ], Arrays::array_column($mock));
-        $this->assertEquals(['John', 'Sally', 'Jane', 'Peter'], Arrays::array_column($mock, 'first_name'));
-        $this->assertEquals([2135 => 'John', 3245 => 'Sally', 5342 => 'Jane', 5623 => 'Peter'], Arrays::array_column($mock, 'first_name', 'id'));
+        ], Collection::array_column($mock));
+        $this->assertEquals(['John', 'Sally', 'Jane', 'Peter'], Collection::array_column($mock, 'first_name'));
+        $this->assertEquals([2135 => 'John', 3245 => 'Sally', 5342 => 'Jane', 5623 => 'Peter'], Collection::array_column($mock, 'first_name', 'id'));
         $this->assertEquals([
             2135 => [
                 'id' => 2135,
@@ -175,7 +175,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
                 'first_name' => 'Peter',
                 'last_name' => 'Doe',
             ],
-        ], Arrays::array_column($mock, null, 'id'));
+        ], Collection::array_column($mock, null, 'id'));
     }
 
     public function testToCsv()
@@ -184,7 +184,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
             1 => ['name' => 'Eric', 'role' => 'developper'],
         ];
 
-        $this->assertSame("Charles;lead developper\nEric;developper\n", Arrays::toCsv($users));
+        $this->assertSame("Charles;lead developper\nEric;developper\n", Collection::toCsv($users));
     }
 
     public function testToBasicXml()
@@ -195,7 +195,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertSame('<users><0><name>Charles</name><role>lead developper</role></0><1><name>Eric</name><role>developper</role></1></users>', Arrays::toBasicXml($users));
+        $this->assertSame('<users><0><name>Charles</name><role>lead developper</role></0><1><name>Eric</name><role>developper</role></1></users>', Collection::toBasicXml($users));
     }
 
     public function testToXml()
@@ -207,7 +207,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
         ];
 
         $xmlReturn = '<users><1><name>Charles</name><role>lead developper</role></1><2><name>Eric</name><role>developper</role><drink>milk &amp; chocolate</drink></2></users>';
-        $this->assertSame($xmlReturn, Arrays::toXml($users));
+        $this->assertSame($xmlReturn, Collection::toXml($users));
     }
 
     public function testArrayDiffAssocRecursive()
@@ -231,8 +231,8 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertSame(Arrays::array_diff_assoc_recursive($users, $users2), $diff1);
-        $this->assertSame(Arrays::array_diff_assoc_recursive($users2, $users), $diff2);
+        $this->assertSame(Collection::array_diff_assoc_recursive($users, $users2), $diff1);
+        $this->assertSame(Collection::array_diff_assoc_recursive($users2, $users), $diff2);
     }
 
     public function testArrayMergeAssocRecursive()
@@ -256,7 +256,7 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertSame(Arrays::array_merge_assoc_recursive($users, $users2), $mergedUsers);
+        $this->assertSame(Collection::array_merge_assoc_recursive($users, $users2), $mergedUsers);
     }
 
     public function testArrayRemoveAssocRecursive()
@@ -284,10 +284,10 @@ class ArraysTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        Arrays::array_remove_assoc_recursive($allUsers, $nicolas);
+        Collection::array_remove_assoc_recursive($allUsers, $nicolas);
         $this->assertSame($allUsers, $expectedResult);
 
-        Arrays::array_remove_assoc_recursive($expectedResult, $unknown);
+        Collection::array_remove_assoc_recursive($expectedResult, $unknown);
         $this->assertSame($expectedResult, ['users' => [
             1 => ['name' => 'Charles', 'role' => 'lead developper'],
             2 => ['name' => 'Eric', 'role' => 'developper'],

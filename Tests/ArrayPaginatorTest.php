@@ -19,7 +19,7 @@
  */
 namespace BackBee\Utils\Tests;
 
-use BackBee\Utils\Arrays\ArrayPaginator;
+use BackBee\Utils\Collection\ArrayPaginator;
 
 /**
  * @author      Flavia Fodor
