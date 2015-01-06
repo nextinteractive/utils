@@ -307,7 +307,7 @@ class File
         }
 
         $files = [];
-        $parse_url = parse_url($basedir);
+        parse_url($basedir);
 
         $directory = new RecursiveDirectoryIterator($basedir);
         $iterator = new RecursiveIteratorIterator($directory);

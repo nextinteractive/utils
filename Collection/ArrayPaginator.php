@@ -26,7 +26,6 @@ class ArrayPaginator implements \Countable, \IteratorAggregate
 {
     private $collection;
     private $currentPage;
-    private $pageSize;
 
     public static function paginate(array $collection, $page = 1, $pageSize = 1)
     {
@@ -37,7 +36,6 @@ class ArrayPaginator implements \Countable, \IteratorAggregate
 
     public function __construct(array $collection, $page, $pageSize)
     {
-        $this->pageSize = (int) $pageSize;
         $this->currentPage = (int) $page;
         $this->collection = array_chunk($collection, (int) $pageSize, true);
     }
