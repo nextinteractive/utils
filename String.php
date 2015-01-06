@@ -251,6 +251,6 @@ class String
             return false;
         }
 
-        return $str == true;
+        return true === $str;
     }
 }
