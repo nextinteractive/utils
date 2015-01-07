@@ -42,7 +42,7 @@ class HashMapTest extends UtilsTestCase
      */
     public function setUp()
     {
-        $this->parameters = Yaml::parse($this->getFixturesFolder().'config.yml');
+        $this->parameters = Yaml::parse(file_get_contents($this->getFixturesFolder().'config.yml'));
         $this->hashmap = new HashMap($this->parameters);
     }
 
@@ -58,7 +58,7 @@ class HashMapTest extends UtilsTestCase
 
     public function testReplace()
     {
-        $newParameters = Yaml::parse($this->getFixturesFolder().'config2.yml');
+        $newParameters = Yaml::parse(file_get_contents($this->getFixturesFolder().'config2.yml'));
         $this->hashmap->replace($newParameters);
 
         $this->assertNotSame($this->parameters, $this->hashmap->all());
@@ -109,7 +109,7 @@ class HashMapTest extends UtilsTestCase
 
     public function testCount()
     {
-        $newParameters = Yaml::parse($this->getFixturesFolder().'config2.yml');
+        $newParameters = Yaml::parse(file_get_contents($this->getFixturesFolder().'config2.yml'));
         $this->hashmap->replace($newParameters);
         $count = count($newParameters);
 
