@@ -1,5 +1,5 @@
 utils library
-==============
+=============
 
 utils library was extracted from BackBee core project.
 This contains a lot of useful methods to manipulate files, arrays and strings.
@@ -12,7 +12,7 @@ This contains a lot of useful methods to manipulate files, arrays and strings.
 
 
 1) Collection
------------------
+-------------
 
 PHP is one of the more convenient programming language to work with arrays
 despite the inconsistency of the API.
@@ -73,7 +73,7 @@ Collection::has($tree, 'root:child:foo'); // return false
 ```
 
 2) Strings
--------------
+----------
 
 We have added to this library some methods to ease encoding operations.
 We provide also some useful functions to handle with strings which have particular meanings like file size or path, urls.
@@ -106,4 +106,79 @@ String::formatBytes(2000, 3); // "1.953 kb"
 String::formatBytes(567000, 5); // "553.71094 kb"
 String::formatBytes(567000); // "553.71 kb"
 String::formatBytes(5670008902); // "5.28 gb"
+```
+
+3) Dir & File
+-------------
+
+We have added to this library some methods to folders manipulation.
+We provide for now 4 methods: ``copy()``, ``delete()``, ``getContent()`` and ``move()``.
+
+Example:
+
+```php
+require_once('some_autoloader.php');
+use BackBee\Utils\File\Dir;
+
+/**
+ * /src
+ *     foo/
+ *        bar.txt
+ *        baz.xml
+ */
+
+$fooPath = __DIR__.DIRECTORY_SEPARATOR.'foo';
+$fooFooPath = $fooPath.DIRECTORY_SEPARATOR.'foo';
+$fooBazPath = $fooPath.DIRECTORY_SEPARATOR.'baz';
+Dir::copy($fooPath, $fooFooPath);
+
+/**
+ * /src
+ *     foo/
+ *         bar.txt
+ *         baz.xml
+ *         foo/
+ *            bar.txt
+ *            baz.xml
+ *         baz/
+ *            bar.txt
+ *            baz.xml
+ */
+
+Dir::delete($fooFooPath);
+
+/**
+ * /src
+ *     foo/
+ *         bar.txt
+ *         baz.xml
+ *         baz/
+ *            bar.txt
+ *            baz.xml
+ */
+
+Dir::getContent(__DIR__);
+
+/**
+ * ['foo' =>
+ *     ['bar.txt', 'bar.xml', 'baz' =>
+ *         ['bar.txt', 'bar.xml']
+ *     ]
+ * ]
+ */
+
+$backbeePath =$fooPath.DIRECTORY_SEPARATOR.'backbee';
+
+Dir::move($fooBazPath, $backbeePath, 000);
+/**
+ * /src
+ *     foo/
+ *         bar.txt
+ *         baz.xml
+ *         backbee/
+ *            bar.txt
+ *            baz.xml
+ */
+
+ Dir::getContent($backbeePath); // throw Exception()
 ```
