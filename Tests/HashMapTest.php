@@ -79,9 +79,22 @@ class HashMapTest extends UtilsTestCase
 
     public function testGet()
     {
+        $pattern = $this->parameters['firewalls']['rest_api_area']['pattern'];
+
         $this->assertSame($this->parameters['firewalls'], $this->hashmap->get('firewalls'));
         $this->assertSame('backbee', $this->hashmap->get('unknown', 'backbee'));
-        $this->assertSame($this->parameters['firewalls']['rest_api_area']['pattern'], $this->hashmap->get('firewalls.rest_api_area.pattern'));
+        $this->assertSame($pattern, $this->hashmap->get('firewalls.rest_api_area.pattern'));
+        $this->assertNull($this->hashmap->get('firewalls.not_exists.pattern'));
+    }
+
+    public function testGetRecursive()
+    {
+        $pattern = $this->parameters['firewalls']['rest_api_area']['pattern'];
+
+        $this->assertSame($this->parameters['firewalls'], $this->hashmap->getRecursive('firewalls'));
+        $this->assertSame('backbee', $this->hashmap->getRecursive('unknown', 'backbee'));
+        $this->assertSame($pattern, $this->hashmap->getRecursive('firewalls.rest_api_area.pattern'));
+        $this->assertNull($this->hashmap->getRecursive('firewalls.not_exists.pattern'));
     }
 
     public function testSet()

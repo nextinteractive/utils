@@ -86,18 +86,44 @@ class HashMap implements \IteratorAggregate, \Countable
      *
      * @param string $key     The key
      * @param mixed  $default The default value
-     * @todo Implement recursive search on the array who contains arrays
      */
     public function get($key, $default = null)
     {
-        if(strpos($key, '.')){
-            $key = explode('.', $key);
+        if(strpos($key, '.')) {
+            return $this->getRecursive($key, $default);
         }
+
         if (array_key_exists($key, $this->parameters)) {
             return $this->parameters[$key];
         } else {
             return $default;
         }
+    }
+
+    /**
+     * Gets a parameter by name recursively
+     *
+     * @param string $key     The dotformatted key
+     * @param mixed $default  The default value
+     */
+    public function getRecursive($key, $default = null)
+    {
+        $value = null;
+        $params = $this->parameters;
+        if(!strpos($key, '.')) {
+            return $this->get($key, $default);
+        }
+
+        $array = explode('.', $key);
+        foreach ($array as $entry) {
+            if(array_key_exists($entry, $params)) {
+                $params = $params[$entry];
+            }else {
+                return $default;
+            }
+        }
+
+        return isset($params) ? $params : $default;
     }
 
     /**
