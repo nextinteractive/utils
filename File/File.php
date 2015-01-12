@@ -259,7 +259,7 @@ class File
             self::mkdir(dirname($topath));
         }
 
-        if (false === @copy($frompath, $topath)) {
+        if (false === copy($frompath, $topath)) {
             throw new ApplicationException(sprintf("Enable to copy file %s to %s.", $from, $to));
         }
 

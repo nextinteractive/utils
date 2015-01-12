@@ -194,7 +194,7 @@ class String
         $mbstring = extension_loaded('mbstring');
         if ($mbstring) {
             $old_encoding = mb_internal_encoding();
-            @mb_internal_encoding(mb_detect_encoding($text));
+            mb_internal_encoding(mb_detect_encoding($text));
         }
         $strlen = ($mbstring) ? 'mb_strlen' : 'strlen';
         $substr = ($mbstring) ? 'mb_substr' : 'substr';
@@ -206,7 +206,7 @@ class String
             $text = $truncate_text.$truncate_string;
         }
         if ($mbstring) {
-            @mb_internal_encoding($old_encoding);
+            mb_internal_encoding($old_encoding);
         }
 
         return $text;
@@ -221,7 +221,7 @@ class String
     {
         $unit = array('b','kb','mb','gb','tb','pb');
 
-        return @round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $roundPrecision).' '.$unit[$i];
+        return round($bytes / pow(1024, ($i = floor(log($bytes, 1024)))), $roundPrecision).' '.$unit[$i];
     }
 
     /**
