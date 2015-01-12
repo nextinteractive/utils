@@ -188,8 +188,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException              BackBee\Utils\Exception\InvalidArgumentException
-     * @expectedExceptionMessageRegExp Bad input in toCsv method.
+     * @expectedException \BackBee\Utils\Exception\InvalidArgumentException
      */
     public function testToCsvWithBadInput()
     {
