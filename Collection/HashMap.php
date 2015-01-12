@@ -90,6 +90,9 @@ class HashMap implements \IteratorAggregate, \Countable
      */
     public function get($key, $default = null)
     {
+        if(strpos($key, '.')){
+            $key = explode('.', $key);
+        }
         if (array_key_exists($key, $this->parameters)) {
             return $this->parameters[$key];
         } else {

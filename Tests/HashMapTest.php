@@ -81,6 +81,7 @@ class HashMapTest extends UtilsTestCase
     {
         $this->assertSame($this->parameters['firewalls'], $this->hashmap->get('firewalls'));
         $this->assertSame('backbee', $this->hashmap->get('unknown', 'backbee'));
+        $this->assertSame($this->parameters['firewalls']['rest_api_area']['pattern'], $this->hashmap->get('firewalls.rest_api_area.pattern'));
     }
 
     public function testSet()
