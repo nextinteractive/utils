@@ -75,6 +75,9 @@ class ArrayPaginatorTest extends \PHPUnit_Framework_TestCase
         $obj = ArrayPaginator::paginate(array('k1' => 'a', 'k2' => 'b', 'k3' => 'c', 'k4' => 'd', 'k5' => 'e'), 2, 1);
         $this->assertEquals(1, $obj->getPreviousPageNumber());
 
+        $obj = ArrayPaginator::paginate(array('k1' => 'a', 'k2' => 'b', 'k3' => 'c', 'k4' => 'd', 'k5' => 'e'), 0, 1);
+        $this->assertEquals(0, $obj->getPreviousPageNumber());
+
         $obj = ArrayPaginator::paginate(array('k1' => 'a', 'k2' => 'b', 'k3' => 'c', 'k4' => 'd', 'k5' => 'e'), 1, 5);
         $this->assertEquals(0, $obj->getPreviousPageNumber());
 

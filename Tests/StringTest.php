@@ -30,33 +30,37 @@ class StringTest extends \PHPUnit_Framework_TestCase
     public function testToASCII()
     {
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII('test')));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII('te90-+st\\')));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII('accentu�')));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII("-100")));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII("l’avocat", 'UTF-8')));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII("1345623", 'ISO-8859-1')));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII("é123", 'UTF-8')));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII("-100", 'ISO-8859-1')));
-
         $this->assertEquals('ASCII', mb_detect_encoding(String::toASCII("©ÉÇáñ", 'UTF-8')));
     }
 
     public function testToUTF8()
     {
         $this->assertEquals('UTF-8', mb_detect_encoding(String::toUTF8('aaa'), 'UTF-8', true));
-
         $this->assertEquals('UTF-8', mb_detect_encoding(String::toUTF8('accentu�'), 'UTF-8', true));
-
         $this->assertEquals('UTF-8', mb_detect_encoding(String::toUTF8('reçoivent'), 'UTF-8', true));
-
         $this->assertEquals('UTF-8', mb_detect_encoding(String::toUTF8('©ÉÇáñ'), 'UTF-8', true));
+    }
+
+    public function testToBoolean()
+    {
+        $trueValues = ['1', 'on', 'true', 'yes'];
+        foreach($trueValues as $value) {
+            $this->assertTrue(String::toBoolean($value));
+        }
+
+        $falseValues = ['0', 'off', 'false', 'no'];
+        foreach ($falseValues as $value) {
+            $this->assertFalse(String::toBoolean($value));
+        }
+
+        $this->assertTrue(String::toBoolean(is_string('BackBee')));
     }
 
     public function testToPath()
