@@ -108,7 +108,6 @@ class HashMap implements \IteratorAggregate, \Countable
      */
     public function getRecursive($key, $default = null)
     {
-        $value = null;
         $params = $this->parameters;
         if(!strpos($key, '.')) {
             return $this->get($key, $default);
