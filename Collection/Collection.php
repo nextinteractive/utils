@@ -19,6 +19,8 @@
  */
 namespace BackBee\Utils\Collection;
 
+use BackBee\Utils\Exception\InvalidArgumentException;
+
 /**
  * @author      c.rouillon <charles.rouillon@lp-digital.fr>
  */
@@ -26,12 +28,13 @@ class Collection
 {
     const LINE_RETURN = "\n";
 
-    /**
-     * @todo throw an exception if $values in not a good input
-     */
     public static function toCsv($values, $separator = ';')
     {
         $return = '';
+        if(!is_array($values) || !is_string($separator)){
+            throw new InvalidArgumentException('Bad input in toCsv method.');
+        }
+
         foreach ($values as $value) {
             if (is_array($value)) {
                 $return .= implode($separator, $value).self::LINE_RETURN;

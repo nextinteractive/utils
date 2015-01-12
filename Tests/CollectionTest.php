@@ -187,6 +187,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("Charles;lead developper\nEric;developper\n", Collection::toCsv($users));
     }
 
+    /**
+     * @expectedException              BackBee\Utils\Exception\InvalidArgumentException
+     * @expectedExceptionMessageRegExp Bad input in toCsv method.
+     */
+    public function testToCsvWithBadInput()
+    {
+        $users = [0 => ['name' => 'Charles', 'role' => 'lead developper'],
+            1 => ['name' => 'Eric', 'role' => 'developper'],
+        ];
+        $separator = '//';
+
+        Collection::toCsv($separator, $users);
+    }
+
     public function testToBasicXml()
     {
         $users = ['users' => [
