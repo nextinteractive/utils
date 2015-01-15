@@ -19,8 +19,11 @@
  */
 namespace BackBee\Utils;
 
+use BackBee\Utils\Exception\InvalidArgumentException;
+
 /**
  * @author      c.rouillon <charles.rouillon@lp-digital.fr>
+ * @author      Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
  */
 class String
 {
@@ -232,6 +235,10 @@ class String
      */
     public static function toBoolean($str)
     {
+        if (!is_string($str)) {
+            throw new InvalidArgumentException(sprintf('String expected, %s received', gettype($str)));
+        }
+
         $booleanTrue = array(
             '1',
             'on',
@@ -251,6 +258,6 @@ class String
             return false;
         }
 
-        return true === $str;
+        return false;
     }
 }

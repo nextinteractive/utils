@@ -59,8 +59,14 @@ class StringTest extends \PHPUnit_Framework_TestCase
         foreach ($falseValues as $value) {
             $this->assertFalse(String::toBoolean($value));
         }
+    }
 
-        $this->assertTrue(String::toBoolean(is_string('BackBee')));
+    /**
+     * @expectedException \BackBee\Utils\Exception\InvalidArgumentException
+     */
+    public function testToBooleanWithIntegerValues()
+    {
+        String::toBoolean(1);
     }
 
     public function testToPath()
