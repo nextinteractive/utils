@@ -142,9 +142,12 @@ class File
      * @param array  $options  optionnal options to
      *                         - include_path The path to include directories
      *                         - base_dir The base directory
+     * @deprecated deprecated since 2.0
      */
     public static function resolveFilepath(&$filename, $key = null, $options = array())
     {
+        $key = array_key_exists($key, $options) ? $key : null;
+
         $filename = self::normalizePath($filename);
         $realname = self::realpath($filename);
 
