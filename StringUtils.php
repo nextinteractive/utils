@@ -25,7 +25,7 @@ use BackBee\Utils\Exception\InvalidArgumentException;
  * @author      c.rouillon <charles.rouillon@lp-digital.fr>
  * @author      Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
  */
-class String
+class StringUtils
 {
     /**
      * Return a mixed array of options according the defaults values provided
