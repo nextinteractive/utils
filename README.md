@@ -4,8 +4,6 @@ utils library
 utils library was extracted from BackBee core project.
 This contains a lot of useful methods to manipulate files, arrays and strings.
 
-** Note that this library is still a work in progress. **
-
 [![Build Status](https://api.travis-ci.org/backbee/utils.svg?branch=master)](https://travis-ci.org/backbee/utils)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/backbee/utils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/backbee/utils/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/backbee/utils/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/backbee/utils/?branch=master)
