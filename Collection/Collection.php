@@ -109,10 +109,12 @@ class Collection
     public static function array_merge_assoc_recursive($array1, $array2)
     {
         foreach ($array2 as $key => $value) {
-            if (!array_key_exists($key, $array1)) {
+            if (is_int($key)) {
+                $array1[] = $array2[$key];
+            } elseif (!array_key_exists($key, $array1)) {
                 $array1[$key] = $value;
-            } elseif (is_array($value)) {
-                $array1[$key] = self::array_merge_assoc_recursive($array1[$key], $array2[$key]);
+            } elseif (is_array($value) && is_array($array1[$key]) ) {
+                $array1[$key] = self::array_merge_assoc_recursive($array1[$key], $value);
             } else {
                 $array1[$key] = $value;
             }
