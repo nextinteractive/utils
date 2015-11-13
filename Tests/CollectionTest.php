@@ -250,23 +250,40 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayMergeAssocRecursive()
     {
-        $users = ['users' => [
-            1 => ['name' => 'Charles', 'role' => 'lead developper'],
-            2 => ['name' => 'Eric', 'role' => 'developper'],
+        $users = [
+            'users' => [
+                1 => ['name' => 'Charles', 'role' => 'lead developper'],
+                2 => ['name' => 'Eric', 'role' => 'developper'],
+                3 => 'Florian',
             ],
+            'foo' => 'bar',
+            'bar' => ['foo'],
+            'back' => 'bee',
         ];
-
-        $users2 = ['users' => [
-            2 => ['name' => 'Eric', 'role' => 'developper'],
-            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+        $users2 = [
+            0 => 'Djoudi',
+            'users' => [
+                1 => 'Mickael',
+                2 => ['name' => 'Harris', 'role' => 'developper'],
+                3 => ['name' => 'Nicolas', 'role' => 'developper'],
             ],
+            'foo' => 'foo',
+            'bar' => 'bar',
+            'back' => ['bee'],
         ];
-
-        $mergedUsers = ['users' => [
-            1 => ['name' => 'Charles', 'role' => 'lead developper'],
-            2 => ['name' => 'Eric', 'role' => 'developper'],
-            3 => ['name' => 'Nicolas', 'role' => 'developper'],
+        $mergedUsers = [
+            'users' => [
+                1 => ['name' => 'Charles', 'role' => 'lead developper'],
+                2 => ['name' => 'Eric', 'role' => 'developper'],
+                3 => 'Florian',
+                4 => 'Mickael',
+                5 => ['name' => 'Harris', 'role' => 'developper'],
+                6 => ['name' => 'Nicolas', 'role' => 'developper'],
             ],
+            'foo' => 'foo',
+            'bar' => 'bar',
+            'back' => ['bee'],
+            0 => 'Djoudi',
         ];
 
         $this->assertSame(Collection::array_merge_assoc_recursive($users, $users2), $mergedUsers);
