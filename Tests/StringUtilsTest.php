@@ -127,6 +127,8 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('percent-euro', StringUtils::urlize('® % € “ ” …'));
 
+        $this->assertEquals('ou-skier-cet-hiver', StringUtils::urlize('Où skier cet hiver'));
+
         $this->assertEquals('', StringUtils::urlize('“ ” …'));
 
         $this->assertEquals('tests_url.com', StringUtils::urlize('test`s url', array(
@@ -145,6 +147,13 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
                     'separators' => '/[.\'’:]+/',
                     'spacereplace' => '#',
         )));
+    }
+
+    public function testReplaceSpecialChars()
+    {
+        $this->assertEquals('actualites', StringUtils::replaceSpecialChars('actualités'));
+
+        $this->assertEquals('Equilibre', StringUtils::replaceSpecialChars('Équilibre'));
     }
 
     public function testToXmlCompliant()

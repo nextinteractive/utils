@@ -28,6 +28,28 @@ use BackBee\Utils\Exception\InvalidArgumentException;
 class StringUtils
 {
     /**
+     * Special chars to be replaced
+     *
+     * @var array
+     */
+    protected static $specialCharsArray = [
+        '/[áàâãªä]/u'   =>   'a',
+        '/[ÁÀÂÃÄ]/u'    =>   'A',
+        '/[ÍÌÎÏ]/u'     =>   'I',
+        '/[íìîï]/u'     =>   'i',
+        '/[éèêë]/u'     =>   'e',
+        '/[ÉÈÊË]/u'     =>   'E',
+        '/[óòôõºö]/u'   =>   'o',
+        '/[ÓÒÔÕÖ]/u'    =>   'O',
+        '/[úùûü]/u'     =>   'u',
+        '/[ÚÙÛÜ]/u'     =>   'U',
+        '/ç/'           =>   'c',
+        '/Ç/'           =>   'C',
+        '/ñ/'           =>   'n',
+        '/Ñ/'           =>   'N'
+    ];
+
+    /**
      * Return a mixed array of options according the defaults values provided
      *
      * @access private
@@ -120,6 +142,7 @@ class StringUtils
                     'spacereplace' => null,
                     'lengthlimit' => 2000,
                 ));
+
         $str = trim(preg_replace('/(?:[^\w\-\.~\+% ]+|%(?![A-Fa-f0-9]{2}))/', '', self::toASCII($str, $charset)));
         $str = preg_replace('/\s+/', null === $options['spacereplace'] ? '' : $options['spacereplace'], $str);
 
@@ -147,10 +170,23 @@ class StringUtils
                     'spacereplace' => '-',
                     'lengthlimit' => 2000,
                 ));
+        $str = self::replaceSpecialChars($str);
         $str = str_replace(array('®', '%', '€', '“', '”', '…'), array('', 'percent', 'euro', '"', '"', '...'), $str);
         $str = preg_replace($options['separators'], ' ', $str);
 
         return strtolower(preg_replace('/[-]+/', '-', self::toPath($str, $options, $charset)));
+    }
+
+    /**
+     * Replace special characters in a given string
+     *
+     * @access public
+     * @param string $str The string in which to replace special characters
+     * @return string The string with the special characters replaced
+     */
+    public static function replaceSpecialChars($str)
+    {
+        return preg_replace(array_keys(self::$specialCharsArray), array_values(self::$specialCharsArray), $str);
     }
 
     /**
