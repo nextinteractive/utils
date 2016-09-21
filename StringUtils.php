@@ -173,6 +173,8 @@ class StringUtils
         $str = self::replaceSpecialChars($str);
         $str = str_replace(array('®', '%', '€', '“', '”', '…'), array('', 'percent', 'euro', '"', '"', '...'), $str);
         $str = preg_replace($options['separators'], ' ', $str);
+        $str = preg_replace('#[^\\pL\d]+#u', '-', $str);
+        $str = preg_replace('#[^-\w]+#', '', $str);
 
         return strtolower(preg_replace('/[-]+/', '-', self::toPath($str, $options, $charset)));
     }
