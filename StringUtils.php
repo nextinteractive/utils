@@ -46,7 +46,12 @@ class StringUtils
         '/ç/'           =>   'c',
         '/Ç/'           =>   'C',
         '/ñ/'           =>   'n',
-        '/Ñ/'           =>   'N'
+        '/Ñ/'           =>   'N',
+        '/œ/'           =>   'oe',
+        '/Œ/'           =>   'OE',
+        '/æ/'           =>   'ae',
+        '/Æ/'           =>   'AE',
+        '/ß/'           =>   'ss',
     ];
 
     /**
@@ -138,10 +143,10 @@ class StringUtils
     public static function toPath($str, $options = null, $charset = 'UTF-8')
     {
         $options = self::_getOptions($options, array(
-                    'extension' => '',
-                    'spacereplace' => null,
-                    'lengthlimit' => 2000,
-                ));
+            'extension' => '',
+            'spacereplace' => null,
+            'lengthlimit' => 2000,
+        ));
 
         $str = trim(preg_replace('/(?:[^\w\-\.~\+% ]+|%(?![A-Fa-f0-9]{2}))/', '', self::toASCII($str, $charset)));
         $str = preg_replace('/\s+/', null === $options['spacereplace'] ? '' : $options['spacereplace'], $str);
@@ -165,16 +170,16 @@ class StringUtils
     public static function urlize($str, $options = null, $charset = 'UTF-8')
     {
         $options = self::_getOptions($options, array(
-                    'extension' => '',
-                    'separators' => '/[.\'’ ]+/',
-                    'spacereplace' => '-',
-                    'lengthlimit' => 2000,
-                ));
+            'extension' => '',
+            'separators' => '/[.\'’ ]+/',
+            'spacereplace' => '-',
+            'lengthlimit' => 2000,
+        ));
         $str = self::replaceSpecialChars($str);
-        $str = str_replace(array('®', '%', '€', '“', '”', '…'), array('', 'percent', 'euro', '"', '"', '...'), $str);
+        $str = str_replace(array('®', '%', '€', '“', '”', '…', '$', '£', '¥'), array('', 'percent', 'euro', '"', '"', '...', 'dollar', 'livre', 'yen'), $str);
         $str = preg_replace($options['separators'], ' ', $str);
-        $str = preg_replace('#[^\\pL\d]+#u', '-', $str);
-        $str = preg_replace('#[^-\w]+#', '', $str);
+
+        $str = preg_replace('/[^A-Za-z0-9_\s\'\:\/[\]-]/','',$str);
 
         return strtolower(preg_replace('/[-]+/', '-', self::toPath($str, $options, $charset)));
     }
